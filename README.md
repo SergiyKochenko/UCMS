@@ -9,6 +9,8 @@
 
 **A comprehensive and colorful terminal-based University Course Management System**
 
+👉 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/SergiyKochenko/UCMS) 👈 **Click to visit the repository!**
+
 [Features](#features) • [Installation](#installation) • [Usage](#usage) • [Project Structure](#project-structure)
 
 </div>
