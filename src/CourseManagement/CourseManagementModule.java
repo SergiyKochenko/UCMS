@@ -163,10 +163,20 @@ public class CourseManagementModule {
 
             switch (choice) {
                 case 1:
-                    // TODO: Implement course name update
+                    // Update course name
+                    System.out.print("Enter new course name: ");
+                    String newCourseName = input.nextLine();
+                    searchedCourse.setCourseName(newCourseName);
+                    System.out.println("✓ Course name updated successfully!");
+                    updateCourse(admin);
                     break;
                 case 2:
-                    // TODO: Implement course code update
+                    // Update course code
+                    System.out.print("Enter new course code: ");
+                    String newCourseCode = input.nextLine();
+                    searchedCourse.setCourseCode(newCourseCode);
+                    System.out.println("✓ Course code updated successfully!");
+                    updateCourse(admin);
                     break;
                 case 3:
                     ModuleManagement.manageModules(admin, searchedCourse);
@@ -209,9 +219,30 @@ public class CourseManagementModule {
 
     /**
      * Archives a course in the system.
-     * Placeholder for future implementation.
+     * Removes the course from the active course list.
      */
     public static void archiveCourse() {
-        // TODO: Implement archive functionality
+        Scanner input = new Scanner(System.in);
+        String title = "ARCHIVE COURSE";
+        int menuWidth = 60;
+        
+        Utility.printInputPromptMenu(title, menuWidth);
+        
+        System.out.print("Enter course code to archive: ");
+        String courseCode = input.nextLine();
+        
+        Course courseToArchive = searchCourse(courseCode);
+        
+        if (courseToArchive != null) {
+            System.out.print("Are you sure you want to archive course " + courseToArchive.getCourseName() + "? (Y/N): ");
+            String confirmation = input.nextLine();
+            
+            if (confirmation.equalsIgnoreCase("Y")) {
+                courseList.remove(courseToArchive);
+                System.out.println("✓ Course archived successfully!");
+            } else {
+                System.out.println("Archive cancelled.");
+            }
+        }
     }
 }

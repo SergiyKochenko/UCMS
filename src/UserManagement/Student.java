@@ -78,11 +78,18 @@ public class Student extends User {
      */
 
     /**
-     * Updates student information (stub for future logic).
+     * Updates student information.
      * @param user User object containing updated information
      */
     public void updateStudent(User user) {
-        // TODO: Implement logic to update student attributes
+        if (user != null) {
+            this.setFirstname(user.getFirstname());
+            this.setLastname(user.getLastname());
+            this.setEmail(user.getEmail());
+            this.setPhone(user.getPhone());
+            this.setAddress(user.getAddress());
+            System.out.println("✓ Student information updated successfully!");
+        }
     }
 
     /**

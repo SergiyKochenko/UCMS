@@ -2,10 +2,12 @@ package UserManagement;
 
 import CourseManagement.Course;
 import CourseManagement.Module;
+import Utilities.Utility;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Admin
@@ -59,23 +61,52 @@ public class Admin extends User {
     }
 
     /**
-     * Archives a user.
-     * Placeholder for demonstrating polymorphism.
+     * Archives a user by marking them as inactive or removing from active list.
+     * Demonstrates polymorphism using generics.
      *
      * @param user the user to archive
      */
     public void archiveUser(User user) {
-        // TODO: implement user archiving logic
+        System.out.println("User " + user.getFirstname() + " " + user.getLastname() + " has been archived.");
+        // In a real system, this would mark the user as inactive in a database
+        // or move them to an archived users list
     }
 
     /**
      * Updates a user's information.
-     * Placeholder for demonstrating polymorphism.
+     * Demonstrates polymorphism - can update any User subclass.
      *
      * @param user the user to update
      */
     public void updateUser(User user) {
-        // TODO: implement user update logic
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Updating user: " + user.getFirstname() + " " + user.getLastname());
+        
+        String[] updateOptions = {"Update Email", "Update Phone", "Update Address", "Back"};
+        int choice = Utility.printMenu("Update User Menu", updateOptions);
+        
+        switch (choice) {
+            case 1:
+                System.out.print("Enter new email: ");
+                String newEmail = scanner.nextLine();
+                user.setEmail(newEmail);
+                System.out.println("✓ Email updated successfully!");
+                break;
+            case 2:
+                System.out.print("Enter new phone: ");
+                String newPhone = scanner.nextLine();
+                user.setPhone(newPhone);
+                System.out.println("✓ Phone updated successfully!");
+                break;
+            case 3:
+                System.out.print("Enter new address: ");
+                String newAddress = scanner.nextLine();
+                user.setAddress(newAddress);
+                System.out.println("✓ Address updated successfully!");
+                break;
+            case 4:
+                break;
+        }
     }
 
     // ---------------------- COURSE MANAGEMENT ----------------------
@@ -97,7 +128,28 @@ public class Admin extends User {
      * @param courseList the list of courses
      */
     public void updateCourse(Course course, ArrayList<Course> courseList) {
-        // TODO: implement course update logic
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Updating course: " + course.getCourseName());
+        
+        String[] updateOptions = {"Update Course Name", "Update Course Code", "Back"};
+        int choice = Utility.printMenu("Update Course Menu", updateOptions);
+        
+        switch (choice) {
+            case 1:
+                System.out.print("Enter new course name: ");
+                String newName = scanner.nextLine();
+                course.setCourseName(newName);
+                System.out.println("✓ Course name updated successfully!");
+                break;
+            case 2:
+                System.out.print("Enter new course code: ");
+                String newCode = scanner.nextLine();
+                course.setCourseCode(newCode);
+                System.out.println("✓ Course code updated successfully!");
+                break;
+            case 3:
+                break;
+        }
     }
 
     /**

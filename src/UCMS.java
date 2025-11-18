@@ -1,3 +1,4 @@
+import CourseManagement.Course;
 import CourseManagement.CourseManagementModule;
 import UserManagement.*;
 import Utilities.Utility;
@@ -123,21 +124,175 @@ public class UCMS {
 
     /**
      * Displays the Student main menu options.
-     * Placeholder method for future functionality (e.g., viewing enrolled modules).
+     * Allows students to view enrolled courses, check grades, and manage profile.
      */
     public static void showStudentOptions() {
-        String[] menuOptions = {"View Modules", "Manage Assessments", "Exit"};
-        int choice = Utility.printMenu("UCMS Student Main Menu", menuOptions);
-        // TODO: Implement actual student menu logic
+        String[] menuOptions = {"View Enrolled Courses", "View Grades", "Enroll in Course", "Drop Course", "Exit"};
+        
+        // Simple login simulation
+        Scanner sc = new Scanner(System.in);
+        Utility.printInputPromptMenu("Student Login", 60);
+        
+        System.out.print("Enter Student ID: ");
+        String studentId = sc.nextLine();
+        
+        System.out.print("Enter Password: ");
+        String password = sc.nextLine();
+        
+        // Find student (simplified - in real system would validate credentials)
+        Student currentStudent = null;
+        for (Student student : StudentManagementModule.studentsContainer) {
+            if (student.getStudentId().equals(studentId)) {
+                currentStudent = student;
+                break;
+            }
+        }
+        
+        if (currentStudent == null) {
+            System.out.println("Student not found!");
+            return;
+        }
+        
+        int choice = Utility.printMenu("UCMS Student Main Menu - Welcome " + currentStudent.getFirstname(), menuOptions);
+        
+        switch (choice) {
+            case 1:
+                // View enrolled courses
+                if (currentStudent.getCourse() != null) {
+                    System.out.println("Enrolled Course: " + currentStudent.getCourse().getCourseName());
+                } else {
+                    System.out.println("You are not enrolled in any course.");
+                }
+                System.out.println("\nPress Enter to continue...");
+                sc.nextLine();
+                showStudentOptions();
+                break;
+            case 2:
+                // View grades
+                currentStudent.viewResults();
+                System.out.println("\nPress Enter to continue...");
+                sc.nextLine();
+                showStudentOptions();
+                break;
+            case 3:
+                // Enroll in course
+                System.out.print("Enter Course Code: ");
+                String courseCode = sc.nextLine();
+                Course course = CourseManagementModule.searchCourse(courseCode);
+                if (course != null) {
+                    currentStudent.setCourse(course);
+                    course.enrollStudent(currentStudent);
+                    System.out.println("✓ Successfully enrolled in " + course.getCourseName());
+                } else {
+                    System.out.println("Course not found!");
+                }
+                System.out.println("\nPress Enter to continue...");
+                sc.nextLine();
+                showStudentOptions();
+                break;
+            case 4:
+                // Drop course
+                if (currentStudent.getCourse() != null) {
+                    System.out.print("Are you sure you want to drop " + currentStudent.getCourse().getCourseName() + "? (Y/N): ");
+                    String confirm = sc.nextLine();
+                    if (confirm.equalsIgnoreCase("Y")) {
+                        currentStudent.getCourse().getStudents().remove(currentStudent);
+                        currentStudent.setCourse(null);
+                        System.out.println("✓ Course dropped successfully!");
+                    }
+                } else {
+                    System.out.println("You are not enrolled in any course.");
+                }
+                System.out.println("\nPress Enter to continue...");
+                sc.nextLine();
+                showStudentOptions();
+                break;
+            case 5:
+                determineRole();
+                break;
+            default:
+                System.out.println("Invalid selection. Try again.");
+                showStudentOptions();
+        }
     }
 
     /**
      * Displays the Lecturer main menu options.
-     * Placeholder method for lecturer-specific functionality.
+     * Allows lecturers to view assigned courses, manage students, and view course modules.
      */
     public static void showLecturerOptions() {
-        Lecturer lecturer = new Lecturer();
-        // TODO: Implement lecturer-specific menu logic
+        Scanner sc = new Scanner(System.in);
+        Utility.printInputPromptMenu("Lecturer Login", 60);
+        
+        System.out.print("Enter First Name: ");
+        String firstname = sc.nextLine();
+        
+        System.out.print("Enter Last Name: ");
+        String lastname = sc.nextLine();
+        
+        System.out.print("Enter Password: ");
+        String password = sc.nextLine();
+        
+        // Create lecturer object (simplified - in real system would validate credentials)
+        Lecturer lecturer = new Lecturer(firstname, lastname, "", password, "", "", "L001", "Computer Science");
+        
+        String[] menuOptions = {"View Assigned Courses", "View Course Students", "View Course Modules", "Exit"};
+        int choice = Utility.printMenu("UCMS Lecturer Main Menu - Welcome " + firstname, menuOptions);
+        
+        switch (choice) {
+            case 1:
+                // View assigned courses
+                System.out.println("\n=== Assigned Courses ===");
+                if (CourseManagementModule.systemHasCourses()) {
+                    for (Course course : CourseManagementModule.courseList) {
+                        System.out.println(course);
+                    }
+                } else {
+                    System.out.println("No courses available.");
+                }
+                System.out.println("\nPress Enter to continue...");
+                sc.nextLine();
+                showLecturerOptions();
+                break;
+                
+            case 2:
+                // View course students
+                System.out.print("Enter Course Code: ");
+                String courseCode = sc.nextLine();
+                Course course = CourseManagementModule.searchCourse(courseCode);
+                if (course != null) {
+                    course.viewStudents();
+                } else {
+                    System.out.println("Course not found!");
+                }
+                System.out.println("\nPress Enter to continue...");
+                sc.nextLine();
+                showLecturerOptions();
+                break;
+                
+            case 3:
+                // View course modules
+                System.out.print("Enter Course Code: ");
+                String courseCode2 = sc.nextLine();
+                Course course2 = CourseManagementModule.searchCourse(courseCode2);
+                if (course2 != null) {
+                    course2.viewModules();
+                } else {
+                    System.out.println("Course not found!");
+                }
+                System.out.println("\nPress Enter to continue...");
+                sc.nextLine();
+                showLecturerOptions();
+                break;
+                
+            case 4:
+                determineRole();
+                break;
+                
+            default:
+                System.out.println("Invalid selection. Try again.");
+                showLecturerOptions();
+        }
     }
 
     /**

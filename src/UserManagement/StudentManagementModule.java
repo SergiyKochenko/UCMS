@@ -132,21 +132,106 @@ public class StudentManagementModule {
 
     /**
      * Removes a student from the system based on their unique student ID.
-     * Currently a placeholder method; implementation should validate input
-     * and remove the corresponding student from studentsContainer.
+     * Prompts for student ID, searches for the student, and removes them if found.
      */
     public static void removeStudents() {
+        Scanner scanner = new Scanner(System.in);
+        Utility.printInputPromptMenu("Remove Student", 60);
+        
         System.out.print("Enter Student ID: ");
-        // TODO: Implement actual removal logic
+        String studentId = scanner.nextLine();
+        
+        Student studentToRemove = null;
+        for (Student student : studentsContainer) {
+            if (student.getStudentId().equals(studentId)) {
+                studentToRemove = student;
+                break;
+            }
+        }
+        
+        if (studentToRemove != null) {
+            System.out.print("Are you sure you want to remove " + studentToRemove.getFirstname() + 
+                           " " + studentToRemove.getLastname() + "? (Y/N): ");
+            String confirmation = scanner.nextLine();
+            
+            if (confirmation.equalsIgnoreCase("Y")) {
+                studentsContainer.remove(studentToRemove);
+                System.out.println("✓ Student removed successfully!");
+            } else {
+                System.out.println("Remove operation cancelled.");
+            }
+        } else {
+            System.out.println("Student with ID " + studentId + " not found!");
+        }
     }
 
     /**
      * Updates student information in the system.
-     * Currently a placeholder method; implementation should allow the admin
-     * to select and update student attributes such as name, address, or course.
+     * Prompts for student ID, finds the student, and allows updating their details.
      */
     public static void updateStudent() {
-        System.out.print("How many students would you like to remove?: ");
-        // TODO: Implement update logic
+        Scanner scanner = new Scanner(System.in);
+        Utility.printInputPromptMenu("Update Student", 60);
+        
+        System.out.print("Enter Student ID: ");
+        String studentId = scanner.nextLine();
+        
+        Student studentToUpdate = null;
+        for (Student student : studentsContainer) {
+            if (student.getStudentId().equals(studentId)) {
+                studentToUpdate = student;
+                break;
+            }
+        }
+        
+        if (studentToUpdate != null) {
+            System.out.println("Current student: " + studentToUpdate.getFirstname() + " " + studentToUpdate.getLastname());
+            
+            String[] updateOptions = {"Update First Name", "Update Last Name", "Update Email", 
+                                     "Update Phone", "Update Address", "Update GPA", "Back"};
+            int choice = Utility.printMenu("Update Student Menu", updateOptions);
+            
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter new first name: ");
+                    String newFirstName = scanner.nextLine();
+                    studentToUpdate.setFirstname(newFirstName);
+                    System.out.println("✓ First name updated successfully!");
+                    break;
+                case 2:
+                    System.out.print("Enter new last name: ");
+                    String newLastName = scanner.nextLine();
+                    studentToUpdate.setLastname(newLastName);
+                    System.out.println("✓ Last name updated successfully!");
+                    break;
+                case 3:
+                    System.out.print("Enter new email: ");
+                    String newEmail = scanner.nextLine();
+                    studentToUpdate.setEmail(newEmail);
+                    System.out.println("✓ Email updated successfully!");
+                    break;
+                case 4:
+                    System.out.print("Enter new phone: ");
+                    String newPhone = scanner.nextLine();
+                    studentToUpdate.setPhone(newPhone);
+                    System.out.println("✓ Phone updated successfully!");
+                    break;
+                case 5:
+                    System.out.print("Enter new address: ");
+                    String newAddress = scanner.nextLine();
+                    studentToUpdate.setAddress(newAddress);
+                    System.out.println("✓ Address updated successfully!");
+                    break;
+                case 6:
+                    System.out.print("Enter new GPA: ");
+                    int newGPA = scanner.nextInt();
+                    studentToUpdate.updateGPA(newGPA);
+                    break;
+                case 7:
+                    break;
+            }
+        } else {
+            System.out.println("Student with ID " + studentId + " not found!");
+        }
     }
 }
